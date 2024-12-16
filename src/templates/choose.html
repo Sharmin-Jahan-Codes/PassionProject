@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Item</title>
+    <style>
+        .task-img {
+            width: 150px;
+            height: 150px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Choose a {{ task.capitalize() }} Item</h1>
+    <div>
+        {% for option in options %}
+        <img src="{{ option }}" alt="{{ task }}" class="task-img" onclick="alert('You selected: {{ task.capitalize() }}')">
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+</html>

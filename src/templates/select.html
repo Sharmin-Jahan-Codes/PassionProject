@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Task</title>
+    <style>
+        .task-button {
+            margin: 10px;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .task-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Choose a Task</h1>
+    {% for task in task_categories %}
+    <button class="task-button" onclick="window.location.href='/choose_item/{{ task }}'">{{ task.capitalize() }}</button>
+    {% endfor %}
+</body>
+</html>
