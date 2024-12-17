@@ -6,39 +6,42 @@
     <title>Kids' Visual Communication App</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            background-image: url("https://i.ibb.co/484Pt2b/kids-nature-background.jpg");
+            background-size: cover;  /* Ensures the image covers the entire screen */
+            background-position: center;  /* Centers the image */
+            background-repeat: no-repeat;  /* Prevents the image from repeating */
+            height: 100vh;  /* Makes sure the background takes the full height of the screen */
+            margin: 0;  /* Removes default margin */
+            font-family: Comic Sans MS, sans-serif;
+            color: rgb(94, 15, 15); 
             text-align: center;
-            padding: 20px;
+            padding: 40px;
         }
         .mode-button {
-            margin: 10px;
-            padding: 10px 20px;
+            margin: 20px;
+            padding: 20px 40px;
             cursor: pointer;
-            font-size: 16px;
-            background-color: #4CAF50;
+            font-size: 20px;
+            font-family: Comic Sans MS;
+            background-color: #17b436;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
         }
         .mode-button:hover {
             background-color: #45a049;
         }
-        .task-section {
+        .task, .emotion {
             margin-top: 20px;
         }
-        .task-img {
-            width: 100px;
-            height: 100px;
-            margin: 10px;
-            cursor: pointer;
-        }
     </style>
+
 </head>
 <body>
     <h1>Welcome to the Kids' Visual Communication App!</h1>
-
+        
     <div>
-        <p><strong>Current Mode: {{ mode.capitalize() }}</strong></p>
+        <h2><strong>Current Mode: {{ mode.capitalize() }}</strong></h2>
 
         <!-- Mode Toggle Button -->
         <button class="mode-button" onclick="toggleMode()">
@@ -53,7 +56,7 @@
         <!-- Link to Child Mode Task Selection -->
     {% if mode == 'child' %}
     <div>
-        <h2>Select a Task</h2>
+        <h1>Select a Task</h1>
         <button class="mode-button" onclick="window.location.href='/select_task'">Basic Needs</button>
         <button class="mode-button" onclick="window.location.href='/select_task'">Emotions</button>
         <button class="mode-button" onclick="window.location.href='/select_task'">Recreational Activities</button>
@@ -66,9 +69,9 @@
     {% if mode == 'parent' %}
     <div class="task-section">
         <h2>Manage Tasks</h2>
-        <button class="mode-button" onclick="updateTask('food', true)">Mark Food as Done</button>
-        <button class="mode-button" onclick="updateTask('rest', true)">Mark Rest as Done</button>
-        <button class="mode-button" onclick="updateTask('wash', true)">Mark Wash as Done</button>
+        <button class="mode-button" onclick="updateTask('food', true)">Mark Basic Needs as Done</button>
+        <button class="mode-button" onclick="updateTask('rest', true)">Mark Emotions as Checked</button>
+        <button class="mode-button" onclick="updateTask('wash', true)">Mark Activities as Done</button>
     </div>
     {% endif %}
 
