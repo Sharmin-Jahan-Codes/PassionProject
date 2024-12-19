@@ -38,7 +38,7 @@
 
 </head>
 <body>
-    <h1>Welcome to the Kids' Visual Communication App!</h1>
+    <h1>Welcome to SoulSightVibe -Kids' Visual Communication App!</h1>
         
     <div>
         <h2><strong>Current Mode: {{ mode.capitalize() }}</strong></h2>
@@ -59,7 +59,7 @@
         <h1>Select a Task</h1>
         <button class="mode-button" onclick="window.location.href='/select_task'">Basic Needs</button>
         <button class="mode-button" onclick="window.location.href='/select_task'">Emotions</button>
-        <button class="mode-button" onclick="window.location.href='/select_task'">Recreational Activities</button>
+        <button class="mode-button" onclick="window.location.href='/select_task'">Activities</button>
     </div>
     {% endif %}
     
@@ -67,11 +67,42 @@
 
     <!-- Parent Mode Task Management -->
     {% if mode == 'parent' %}
+
+</head>
+<body>
+    
+
+    <!-- Task Uplode Section -->
+    <h2>Uplode Your Child’s Preferred Choices</h2>
+    <form action="/update_task" method="POST" id="updateTaskForm">
+        <!-- Use JavaScript to update task status dynamically if needed -->
+    </form>
+
+    <!-- Upload Section (visible only in Parent Mode) -->
+    {% if mode == 'parent' %}
+    <h3>Upload File</h3>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <label for="category">Select Category: </label>
+        <select name="category" id="category" required>
+            <option value="basic_needs">Basic Needs</option>
+            <option value="emotions">Emotions</option>
+            <option value="activities">Activities</option>
+        </select><br><br>
+
+        <label for="file">Select file (image, audio, video): </label>
+        <input type="file" name="file" id="file" accept=".png, .jpg, .jpeg, .gif, .mp3, .wav, .mp4, .avi" required><br><br>
+
+        <button type="submit">Upload</button>
+    </form>
+    {% endif %}
+
+    <div id="uploadedFiles"></div>
+    
     <div class="task-section">
         <h2>Manage Tasks</h2>
         <button class="mode-button" onclick="updateTask('food', true)">Mark Basic Needs as Done</button>
         <button class="mode-button" onclick="updateTask('rest', true)">Mark Emotions as Checked</button>
-        <button class="mode-button" onclick="updateTask('wash', true)">Mark Activities as Done</button>
+        <button class="mode-button" onclick="updateTask('wash', true)">Mark Activities as Completed</button>
     </div>
     {% endif %}
 
