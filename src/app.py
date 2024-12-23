@@ -2,11 +2,12 @@ from flask import Flask, request, render_template
 import os
 import json
 
+
 app = Flask(__name__)
 
 # Define directories for storing uploaded files in each category
 UPLOAD_FOLDER = 'static/uploads'
-CATEGORIES = ['basic_needs', 'emotions', 'activities']
+CATEGORIES = ['daily_living','nutrition','emotions', 'activities']
 
 # Create the necessary directories for each category
 for category in CATEGORIES:
@@ -18,8 +19,8 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp3', 'wav', 'mp4', 'avi'}
 # Default state for tasks
 tasks = {
     'food': False,
-    'rest': False,
-    'wash': False
+    'emotion': False,
+    'activity': False
 }
 
 # Mode flag to switch between Parent Mode and Child Mode
@@ -28,8 +29,8 @@ mode = "child"  # Default mode is child
 # Task images (you can replace the image paths with actual image files)
 task_images = {
     'food': 'images/food.png',
-    'rest': 'images/rest.png',
-    'wash': 'images/wash.png'
+    'emotion': 'images/emotion.png',
+    'activity': 'images/activity.png'
 }
 
 def allowed_file(filename):
@@ -149,6 +150,8 @@ def upload_file():
             status=400,
             mimetype='application/json'
         )
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

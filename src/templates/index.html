@@ -17,90 +17,98 @@
             text-align: center;
             padding: 40px;
         }
+
+        /* Default background for child mode */
+        body.child-mode {
+            background-image: url("https://i.ibb.co/484Pt2b/kids-nature-background.jpg");
+        }
+
+        /* Background for parent mode */
+        body.parent-mode {
+            background-image: url("https://i.ibb.co/zZ4rLgY/Kids-Custom-Poster-Backgrounds.jpg");
+        }
+
         .mode-button {
-            margin: 20px;
-            padding: 20px 40px;
+            margin: 10px;
+            padding: 15px 40px;
             cursor: pointer;
             font-size: 20px;
             font-family: Comic Sans MS;
             background-color: #17b436;
             color: white;
-            border: none;
+            border: 2px solid #e6f825; /* Border around the button */
             border-radius: 25px;
         }
-        .mode-button:hover {
-            background-color: #45a049;
+        
+        /* Extra small button size */
+        .mode-button.sm {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: 2px solid #f58f0a;
+            background-color: #dbf01c;
+            color: rgba(33, 15, 239, 0.795);
         }
+
+        .mode-button:hover {
+            background-color: #2b81f2;
+        }
+
         .task, .emotion {
             margin-top: 20px;
         }
     </style>
-
 </head>
-<body>
+<body class="{{ mode }}-mode">
     <h1>Welcome to SoulSightVibe - Kids' Visual Communication App!</h1>
-        
+
     <div>
         <h2><strong>Current Mode: {{ mode.capitalize() }}</strong></h2>
 
         <!-- Mode Toggle Button -->
-        <button class="mode-button" onclick="toggleMode()">
-            Switch to {{ 'Parent' if mode == 'child' else 'Child' }} Mode
-        </button>
+        <button class="mode-button" onclick="toggleMode()">Switch to {{ 'Parent' if mode == 'child' else 'Child' }} Mode</button>
     </div>
 
-    <!-- Child Mode Task Selection (Images for tasks) -->
+    <!-- Child Mode Task Selection -->
     {% if mode == 'child' %}
     <div class="task-section">
-        
-    {% if mode == 'child' %}
-    <div>
         <h1>Select a Task</h1>
-        <button class="mode-button" onclick="window.location.href='/select_task'">Basic Needs</button>
+        <button class="mode-button" onclick="window.location.href='/select_task'">Daily Living</button>
+        <button class="mode-button" onclick="window.location.href='/select_task'">Nutrition</button>
         <button class="mode-button" onclick="window.location.href='/select_task'">Emotions</button>
-        <button class="mode-button" onclick="window.location.href='/select_task'">Activities</button>
+        <button class="mode-button" onclick="window.location.href='/select_task'">Recreational Activities</button>
     </div>
-    {% endif %}
-    
     {% endif %}
 
     <!-- Parent Mode Task Management -->
     {% if mode == 'parent' %}
-
-</head>
-<body>
-    
-    <!-- Task Uplode Section -->
-    <h2>Uplode Your Child’s Preferred Choices</h2>
+    <h2>Upload Your Child’s Preferred Choices</h2>
     <form action="/update_task" method="POST" id="updateTaskForm">
         <!-- Use JavaScript to update task status dynamically if needed -->
     </form>
 
     <!-- Upload Section (visible only in Parent Mode) -->
-    {% if mode == 'parent' %}
-    <h3>Upload File</h3>
     <form action="/static/uploads" method="POST" enctype="multipart/form-data">
         <label for="category">Select Category: </label>
         <select name="category" id="category" required>
-            <option value="basic_needs">Basic Needs</option>
+            <option value="daily_living">Daily Living</option>
+            <option value="food">Nutrition</option>
             <option value="emotions">Emotions</option>
-            <option value="activities">Activities</option>
+            <option value="activities">Recreational Activities</option>
         </select><br><br>
 
         <label for="file">Select file (image, audio, video): </label>
         <input type="file" name="file" id="file" accept=".png, .jpg, .jpeg, .gif, .mp3, .wav, .mp4, .avi" required><br><br>
 
-        <button type="submit">Upload</button>
+        <button class="mode-button sm" type="submit">Upload File</button> 
     </form>
-    {% endif %}
 
     <div id="uploadedFiles"></div>
     
     <div class="task-section">
         <h2>Manage Tasks</h2>
-        <button class="mode-button" onclick="updateTask('food', true)">Mark Basic Needs as Done</button>
-        <button class="mode-button" onclick="updateTask('rest', true)">Mark Emotions as Checked</button>
-        <button class="mode-button" onclick="updateTask('wash', true)">Mark Activities as Completed</button>
+        <button class="mode-button" onclick="updateTask('food', true)">Mark Daily Living as Done</button>
+        <button class="mode-button" onclick="updateTask('emotion', true)">Mark Emotions as Checked</button>
+        <button class="mode-button" onclick="updateTask('activity', true)">Mark Activities as Completed</button>
     </div>
     {% endif %}
 
@@ -130,5 +138,3 @@
     </script>
 </body>
 </html>
-
-
