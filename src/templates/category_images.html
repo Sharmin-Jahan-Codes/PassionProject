@@ -6,7 +6,7 @@
     <title>{{ category.capitalize() }} Images</title>
     <style>
         body {
-            background-image: url("https://i.ibb.co/484Pt2b/kids-nature-background.jpg");
+            background-image: url("https://i.ibb.co/tJjDHJW/kids-pic.jpg");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -18,31 +18,40 @@
             padding: 40px;
         }
 
-        .mode-button {
-            margin: 10px;
-            padding: 15px 40px;
-            cursor: pointer;
-            font-size: 20px;
-            font-family: Comic Sans MS;
-            background-color: #6c57f1;
-            color: white;
-            border: 2px solid #e6f825;
-            border-radius: 25px;
-        }
-        .mode-button:hover {
-            background-color: #f165f9;
-        }    
         .image-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 40px;
+            gap: 20px;
         }
 
         .image-container img {
             max-width: 100%;
-            max-height: 300px;
-            border-radius: 20px;
+            height: 500px;  /* Set a fixed height for large images */
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-container .image-item {
+            flex-basis: 30%;
+            margin-bottom: 20px;
+        }
+
+        .mode-button {
+            margin-top: 20px;
+            padding: 15px 40px;
+            cursor: pointer;
+            font-size: 20px;
+            font-family: Comic Sans MS;
+            background-color: #753eeb;
+            color: white;
+            border: 2px solid #e6f825;
+            border-radius: 25px;
+        }
+
+        .mode-button:hover {
+            background-color: #e551d6;
         }
     </style>
 </head>
@@ -50,11 +59,15 @@
     <h1>Uploaded Images for {{ category.capitalize() }}</h1>
 
     <div class="image-container">
-        {% for file_path in file_paths %}
-            <div class="image-item">
-                <img src="/{{ file_path }}" alt="Uploaded Image">
-            </div>
-        {% endfor %}
+        {% if file_paths %}
+            {% for file_path in file_paths %}
+                <div class="image-item">
+                    <img src="{{ file_path }}" alt="Uploaded Image">
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No images uploaded for this category yet.</p>
+        {% endif %}
     </div>
 
     <br>
