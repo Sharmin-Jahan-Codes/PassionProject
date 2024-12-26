@@ -1,14 +1,17 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for, session, flash
 import json
 
 app = Flask(__name__)
+
+# Secret key for session management
+app.secret_key = os.urandom(24)
 
 # Define directories for storing uploaded files in each category
 UPLOAD_FOLDER = 'static/uploads'
 CATEGORIES = ['daily_living', 'emotions', 'activities', 'nutrition']
 
-# Create the necessary directories for each category if they don't exist
+# Create the necessary directories for each category
 for category in CATEGORIES:
     os.makedirs(os.path.join(UPLOAD_FOLDER, category), exist_ok=True)
 
@@ -22,25 +25,31 @@ tasks = {
     'activity': False,
     'nutrition': False
 }
+
 # Mode flag to switch between Parent Mode and Child Mode
 mode = "child"  # Default mode is child
 
-# Task images (you can replace the image paths with actual image files)
+# Task images
 task_images = {
     'daily_living': 'images/daily_living.png',
     'emotion': 'images/emotion.png',
     'activity': 'images/activity.png',
-    'nutrition': 'images/nutrition.png'  # Added image for "nutrition"
+    'nutrition': 'images/nutrition.png'
 }
 
-# Mode flag to switch between Parent Mode and Child Mode
-mode = "child"  # Default mode is child
+# Simulate a simple user database (replace with real database in production)
+users = {
+    'parent': 'password123',  # Example user
+    'child': 'childpassword'
+}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def home():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     return render_template('index.html', mode=mode, tasks=tasks, task_images=task_images)
 
 # Toggle between Parent and Child mode
@@ -49,57 +58,63 @@ def toggle_mode():
     global mode
     mode = "parent" if mode == "child" else "child"
     response = {'message': f'Mode switched to {mode}', 'mode': mode}
-    return response
+    return app.response_class(
+        response=json.dumps(response),
+        status=200,
+        mimetype='application/json'
+    )
 
-# Endpoint to get all images for a selected category
-@app.route('/category_images/<category>', methods=['GET'])
-def category_images(category):
-    if category not in CATEGORIES:
-        return "Invalid category", 400
-    
-    category_folder = os.path.join(UPLOAD_FOLDER, category)
-    
-    if not os.path.exists(category_folder):
-        return "No files found in this category", 404
-    
-    files = [f for f in os.listdir(category_folder) if allowed_file(f)]
-    if not files:
-        return "No files found in this category", 404
-    
-    # Generate paths to the images
-    file_paths = [os.path.join('uploads', category, file) for file in files]
-    
-    return render_template('category_images.html', category=category, file_paths=file_paths)
+# Login route
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if 'username' in session:
+        return redirect(url_for('home'))  # Already logged in
 
-# Route for uploading files in different categories
-@app.route('/static/uploads', methods=['POST'])
-def upload_file():
-    if mode != "parent":
-        return "You cannot upload files in Child Mode", 403
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
 
-    # Get the category and check if it's valid
-    category = request.form.get('category')
-    if category not in CATEGORIES:
-        return "Invalid category", 400
+        # Simple check (replace with database query and password hashing in production)
+        if username in users and users[username] == password:
+            session['username'] = username  # Store the username in session
+            flash('Login successful!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid username or password!', 'danger')
+            return render_template('login.html')
 
-    # Check if the post request has the file part
-    if 'file' not in request.files:
-        return "No file part", 400
-    
-    file = request.files['file']
-    
-    # If no file is selected
-    if file.filename == '':
-        return "No selected file", 400
-    
-    # If the file is allowed, save it in the corresponding category folder
-    if file and allowed_file(file.filename):
-        filename = os.path.join(UPLOAD_FOLDER, category, file.filename)
-        file.save(filename)
-        return f"File successfully uploaded to {category}: {filename}", 200
-    else:
-        return "Invalid file format", 400
-    
+    return render_template('login.html')
+
+# Sign-up route
+@app.route('/sign_up', methods=['GET', 'POST'])
+def sign_up():
+    if 'username' in session:
+        return redirect(url_for('home'))  # Already logged in
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # Check if username already exists
+        if username in users:
+            flash('Username already exists. Please choose a different username.', 'danger')
+            return render_template('sign_up.html')
+        
+        # Store the new user (you should hash the password in a real app)
+        users[username] = password
+        flash('Account created successfully! You can now log in.', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('sign_up.html')
+
+# Logout route
+@app.route('/logout')
+def logout():
+    session.pop('username', None)  # Remove username from session
+    flash('Logged out successfully', 'info')
+    return redirect(url_for('login'))
+
+
 # Get the current state of tasks
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
@@ -140,6 +155,79 @@ def update_task():
             mimetype='application/json'
         )
 
+# Endpoint to get all images for a selected category
+@app.route('/category_images/<category>', methods=['GET'])
+def category_images(category):
+    if category not in CATEGORIES:
+        return "Invalid category", 400
+    
+    category_folder = os.path.join(UPLOAD_FOLDER, category)
+    
+    if not os.path.exists(category_folder):
+        return "No files found in this category", 404
+    
+    files = [f for f in os.listdir(category_folder) if allowed_file(f)]
+    if not files:
+        return "No files found in this category", 404
+    
+    file_paths = [os.path.join('uploads', category, file) for file in files]
+    
+    return render_template('category_images.html', category=category, file_paths=file_paths)
+
+# Route for uploading files in different categories
+@app.route('/static/uploads', methods=['POST'])
+def upload_file():
+    if mode != "parent":
+        response = {'message': 'You cannot upload files in Child Mode'}
+        return app.response_class(
+            response=json.dumps(response),
+            status=403,
+            mimetype='application/json'
+        )
+
+    category = request.form.get('category')
+    if category not in CATEGORIES:
+        response = {'message': 'Invalid category'}
+        return app.response_class(
+            response=json.dumps(response),
+            status=400,
+            mimetype='application/json'
+        )
+
+    if 'file' not in request.files:
+        response = {'message': 'No file part'}
+        return app.response_class(
+            response=json.dumps(response),
+            status=400,
+            mimetype='application/json'
+        )
+    
+    file = request.files['file']
+    
+    if file.filename == '':
+        response = {'message': 'No selected file'}
+        return app.response_class(
+            response=json.dumps(response),
+            status=400,
+            mimetype='application/json'
+        )
+    
+    if file and allowed_file(file.filename):
+        filename = os.path.join(UPLOAD_FOLDER, category, file.filename)
+        file.save(filename)
+        response = {'message': f'File successfully uploaded to {category}: {filename}'}
+        return app.response_class(
+            response=json.dumps(response),
+            status=200,
+            mimetype='application/json'
+        )
+    else:
+        response = {'message': 'Invalid file format'}
+        return app.response_class(
+            response=json.dumps(response),
+            status=400,
+            mimetype='application/json'
+        )
+
 if __name__ == '__main__':
     app.run(debug=True)
-

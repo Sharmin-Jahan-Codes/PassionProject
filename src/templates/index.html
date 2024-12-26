@@ -45,9 +45,11 @@
             background-color: #dbf01c;
             color: rgba(33, 15, 239, 0.795);
         }
-
+        .mode-button.sm:hover {
+            background-color: #18bff6;
+        }
         .mode-button:hover {
-            background-color: #2b81f2;
+            background-color: #428ef2;
         }
 
         .task, .emotion {
@@ -62,6 +64,20 @@
             max-width: 100%;
             max-height: 400px;
         }
+    .rounded-button {
+        padding: 15px 20px;
+        font-family: Comic Sans MS;
+        font-size: 18px;
+        background-color: #eb9b11;
+        border: 2px solid #058fda;
+        color: white;
+        border-radius: 25px; 
+        cursor: pointer;
+        }
+
+    .rounded-button:hover {
+        background-color: #06e6c8;
+    }
     </style>
 </head>
 <body class="{{ mode }}-mode">
@@ -82,6 +98,13 @@
         <button class="mode-button" onclick="goToCategory('emotions')">Emotions</button>
         <button class="mode-button" onclick="goToCategory('activities')">Recreational Activities</button>
         <button class="mode-button" onclick="goToCategory('nutrition')">Nutrition</button>
+    </div>
+    <br>
+    </div>
+    </div>
+    <h2>Return to Login Page</h2>
+    </div>
+    <button class="rounded-button" onclick="window.history.back()">Back</button>
     </div>
     {% endif %}
 
@@ -112,11 +135,11 @@
     <div id="uploadedFiles"></div>
 
     <div class="task-section">
-        <h2>Manage Tasks</h2>
-        <button class="mode-button" onclick="updateTask('daily_living', true)">Mark Daily Living as Done</button>
-        <button class="mode-button" onclick="updateTask('emotion', true)">Mark Emotions as Checked</button>
-        <button class="mode-button" onclick="updateTask('activity', true)">Mark Activities as Completed</button>
-        <button class="mode-button" onclick="updateTask('nutrition', true)">Mark Food as Finished</button> 
+        <h2>Supervise Tasks Assigned to Child</h2>
+        <button class="rounded-button" onclick="updateTask('daily_living', true)">Mark Daily Living as Done</button>
+        <button class="rounded-button" onclick="updateTask('emotion', true)">Mark Emotions as Checked</button>
+        <button class="rounded-button" onclick="updateTask('activity', true)">Mark Activities as Completed</button>
+        <button class="rounded-button" onclick="updateTask('nutrition', true)">Mark Food as Finished</button> 
     </div>
     {% endif %}
 
