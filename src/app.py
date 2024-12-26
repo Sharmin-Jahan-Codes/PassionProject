@@ -77,10 +77,9 @@ def login():
         # Simple check (replace with database query and password hashing in production)
         if username in users and users[username] == password:
             session['username'] = username  # Store the username in session
-            flash('Login successful!', 'success')
             return redirect(url_for('home'))
         else:
-            flash('Invalid username or password!', 'danger')
+            flash('Invalid Username or Password !', 'danger')
             return render_template('login.html')
 
     return render_template('login.html')
@@ -97,12 +96,12 @@ def sign_up():
 
         # Check if username already exists
         if username in users:
-            flash('Username already exists. Please choose a different username.', 'danger')
+            flash('Username Already Exists. Please Choose a Different Username.', 'danger')
             return render_template('sign_up.html')
         
         # Store the new user (you should hash the password in a real app)
         users[username] = password
-        flash('Account created successfully! You can now log in.', 'success')
+        flash('Account Created Successfully !', 'success')
         return redirect(url_for('login'))
 
     return render_template('sign_up.html')
@@ -111,7 +110,7 @@ def sign_up():
 @app.route('/logout')
 def logout():
     session.pop('username', None)  # Remove username from session
-    flash('Logged out successfully', 'info')
+    flash('Logged Out Successfully !')
     return redirect(url_for('login'))
 
 

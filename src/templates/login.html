@@ -14,43 +14,45 @@
             height: 100vh;
             margin: 0;
             font-family: Comic Sans MS, sans-serif;
-            color: rgb(94, 15, 15);
+            color:  rgb(5, 147, 24);
             text-align: center;
             padding: 40px;
         }
 
         .login-container {
-            background-color: rgba(255, 255, 255, 0.8);  /* semi-transparent background */
+            background-color: rgba(216, 239, 248, 0.8);  /* semi-transparent background */
             padding: 40px;
             border-radius: 10px;
             width: 100%;
             max-width: 400px;
             margin: 0 auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
         }
 
         .login-container h1 {
-            color: rgb(94, 15, 15);
+            color: rgb(5, 147, 24);
             margin-bottom: 30px;
+            font-size: 40px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 25px;
         }
 
         .form-control {
-            width: 100%;
+            width: 90%;
             padding: 10px;
-            font-size: 16px;
+            font-size: 20px;
             border-radius: 5px;
-            border: 1px solid #ccc;
+            border: 3px solid #a96af2;
         }
 
         .btn-primary {
-            width: 100%;
+            width: 95%;
             padding: 10px;
-            font-size: 18px;
-            background-color: rgb(94, 15, 15);
+            font-family: Comic Sans MS, sans-serif;
+            font-size: 22px;
+            background-color: rgb(134, 7, 7);
             color: white;
             border: none;
             border-radius: 5px;
@@ -58,16 +60,16 @@
         }
 
         .btn-primary:hover {
-            background-color: rgb(129, 22, 22);
+            background-color: rgb(118, 71, 238);
         }
 
         .login-container a {
-            color: rgb(94, 15, 15);
-            font-size: 14px;
+            color: rgb(156, 16, 207);
+            font-size: 18px;
         }
 
         .login-container a:hover {
-            color: rgb(129, 22, 22);
+            color: rgb(25, 65, 246);
         }
     </style>
 </head>
@@ -87,18 +89,22 @@
 
         <form action="{{ url_for('login') }}" method="POST">
             <div class="form-group">
-                <label for="username">Username</label>
+                <h3><label for="username">Username</label></h3>
                 <input type="text" class="form-control" id="username" name="username" required>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <h3><label for="password">Password</label></h3>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
 
         <hr>
-        <p>Don't have an account? <a href="{{ url_for('sign_up') }}">Sign up here</a></p>
+        <h3><p>Don't have an Account? <a href="{{ url_for('sign_up') }}"><h3>Sign Up Here</a></p></h3>
+
+        {% if 'username' in session %}
+            <h1><a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Logout</a></h1>
+        {% endif %}
     </div>
 </body>
 </html>

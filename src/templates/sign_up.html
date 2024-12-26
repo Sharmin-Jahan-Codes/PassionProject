@@ -16,14 +16,14 @@
             height: 100vh;
             margin: 0;
             font-family: Comic Sans MS, sans-serif;
-            color: rgb(94, 15, 15);
+            color: rgb(57, 33, 244);
             text-align: center;
             padding: 40px;
         }
 
         /* Container styling for the sign-up form */
         .container {
-            background-color: rgba(255, 255, 255, 0.8);  /* semi-transparent background */
+            background-color: rgba(216, 239, 248, 0.8);  /* semi-transparent background */
             padding: 40px;
             border-radius: 10px;
             width: 100%;
@@ -33,7 +33,7 @@
         }
 
         .container h1 {
-            color: rgb(94, 15, 15);
+            color: rgb(16, 169, 5);
             margin-bottom: 30px;
         }
 
@@ -44,16 +44,16 @@
         .form-control {
             width: 100%;
             padding: 10px;
-            font-size: 16px;
+            font-size: 18px;
             border-radius: 5px;
-            border: 1px solid #ccc;
+            border: 2px solid #19e359;
         }
 
         .btn-primary {
             width: 100%;
             padding: 10px;
-            font-size: 18px;
-            background-color: rgb(94, 15, 15);
+            font-size: 20px;
+            background-color: rgb(52, 136, 246);
             color: white;
             border: none;
             border-radius: 5px;
@@ -61,22 +61,22 @@
         }
 
         .btn-primary:hover {
-            background-color: rgb(129, 22, 22);
+            background-color: rgb(14, 186, 8);
         }
 
         .container a {
-            color: rgb(94, 15, 15);
-            font-size: 14px;
+            color: rgb(238, 131, 10);
+            font-size: 18px;
         }
 
         .container a:hover {
-            color: rgb(129, 22, 22);
+            color: rgb(230, 11, 223);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Sign Up</h1>
+        <h2>Sign Up</h2>
         
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -101,7 +101,7 @@
         </form>
         
         <hr>
-        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        <h><p>Already have an Account? <a href="{{ url_for('login') }}"><h>Login Here</a></p></h>
     </div>
 </body>
 </html>

@@ -78,6 +78,22 @@
     .rounded-button:hover {
         background-color: #06e6c8;
     }
+    /* Logout button style */
+    .logout-button {
+            padding: 12px 20px;
+            font-family: Comic Sans MS;
+            font-size: 20px;
+            background-color: #e63e3e;
+            border: 2px solid #e1f508;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .logout-button:hover {
+            background-color: #f723da;
+        }
     </style>
 </head>
 <body class="{{ mode }}-mode">
@@ -100,7 +116,6 @@
         <button class="mode-button" onclick="goToCategory('nutrition')">Nutrition</button>
     </div>
     <br>
-    </div>
     </div>
     <h2>Return to Login Page</h2>
     </div>
@@ -143,6 +158,14 @@
     </div>
     {% endif %}
 
+    <!-- Display logout button only if the user is logged in -->
+    {% if 'username' in session %}
+        <h2><p>Welcome, {{ session['username'] }} !</p></h2>
+        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+    {% else %}
+        <p>You are not logged in. <a href="{{ url_for('login') }}">Login here</a></p>
+    {% endif %}
+    </div>
 
     <script>
         // Function to toggle between Parent and Child modes
