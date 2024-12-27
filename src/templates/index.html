@@ -13,7 +13,7 @@
             height: 100vh;
             margin: 0;
             font-family: Comic Sans MS, sans-serif;
-            color: rgb(94, 15, 15);
+            color: rgb(131, 6, 18);
             text-align: center;
             padding: 40px;
         }
@@ -194,6 +194,24 @@
             .then(response => response.json())
             .then(data => alert(data.message));
         }
+        
+        function deleteFile(filePath) {
+        fetch('/delete_file', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ file_path: filePath })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            location.reload();  // Reload the page to reflect the changes
+        })
+        .catch(error => {
+            alert('Error deleting file: ' + error);
+        });
+    }
 
     </script>
 </body>
