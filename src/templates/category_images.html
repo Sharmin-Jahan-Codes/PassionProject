@@ -3,48 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ category.capitalize() }} Images</title>
+    <title>{{ category.capitalize() }} Media</title>
     <style>
         body {
             background-image: url("https://i.ibb.co/tJjDHJW/kids-pic.jpg");
-            background-size: cover; 
-            background-position: center; 
-            background-repeat: no-repeat; 
-            background-attachment: fixed; 
-            height: 100%; 
-            margin: 0; 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            height: 100%;
+            margin: 0;
             font-family: Comic Sans MS, sans-serif;
             color: rgb(94, 15, 15);
-            text-align: center; 
-            padding: 40px; 
+            text-align: center;
+            padding: 40px;
         }
 
+        /* Flex container for both videos and images */
+        .media-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            flex-wrap: wrap;
+            align-items: flex-start;  /* Ensure items are aligned to the top */
+        }
 
+        /* Video container (left side of the page) */
+        .video-container {
+            width: 45%;  /* Set video container width */
+            margin: 20px 0;
+            border-radius: 20px;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            background: #333;
+            transition: transform 0.3s ease;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* Image container (right side of the page) */
         .image-container {
+            width: 100%;  /* Make the image container full width if no video is found */
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
         }
 
-        .image-container img {
-            width: 100%;              
-            max-width: 200px;         
-            height: auto;           
-            object-fit: contain;      
+        .media-item img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            object-fit: contain;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(178, 36, 36, 0.2);
-            background-color: #f0f0f0; 
-            border: 1px solid #1c0c0c; 
+            background-color: #f0f0f0;
+            border: 1px solid #1c0c0c;
         }
 
-        .image-container .image-item {
-            flex-basis: 30%;          
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;  
-        }
-
+        /* Button */
         .mode-button {
             margin-top: 20px;
             padding: 10px 40px;
@@ -60,21 +81,62 @@
         .mode-button:hover {
             background-color: #e551d6;
         }
+
+        /* For small screens, stack video and image containers */
+        @media (max-width: 768px) {
+            .media-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .video-container,
+            .image-container {
+                width: 80%;
+            }
+
+            .media-item img {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Uploaded Images for {{ category.capitalize() }}</h1>
+    <h1>Uploaded Media for {{ category.capitalize() }}</h1>
 
-    <div class="image-container">
+    <div class="media-container">
         {% if file_paths %}
+            {% set video_found = false %}
+
+            <!-- Only display video container if a video exists -->
             {% for file_path in file_paths %}
-                <div class="image-item">
-                    <!-- Display the uploaded image -->
-                <img src="{{ url_for('static', filename=file_path) }}" alt="Uploaded Image">
-                </div>
+                {% set file_ext = file_path.split('.')[-1].lower() %}
+                {% if file_ext in ['mp4', 'webm', 'ogg'] %}
+                    {% if not video_found %}
+                        <div class="video-container">
+                            <video controls>
+                                <source src="{{ url_for('static', filename=file_path) }}" type="video/{{ file_ext }}">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        {% set video_found = true %}
+                    {% endif %}
+                {% endif %}
             {% endfor %}
+
+            <!-- Right side for images -->
+            <div class="image-container">
+                {% for file_path in file_paths %}
+                    {% set file_ext = file_path.split('.')[-1].lower() %}
+                    {% if file_ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp'] %}
+                        <div class="media-item">
+                            <img src="{{ url_for('static', filename=file_path) }}" alt="Uploaded Image">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
         {% else %}
-            <p>No images uploaded for this category yet.</p>
+            <p>No media uploaded for this category yet.</p>
         {% endif %}
     </div>
 
