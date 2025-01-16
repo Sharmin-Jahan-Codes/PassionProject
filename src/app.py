@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Secret key for session management
 app.secret_key = os.urandom(24)
 
-# Define directories for storing uploaded files in each category
+# Storing uploaded files in each category
 UPLOAD_FOLDER = 'static/uploads'
 CATEGORIES = ['daily_living', 'emotions', 'activities', 'nutrition']
 
@@ -26,7 +26,7 @@ tasks = {
     'nutrition': False
 }
 
-# Mode flag to switch between Parent Mode and Child Mode
+# Switch between Parent Mode and Child Mode
 mode = "child"  # Default mode is child
 
 # Task images
@@ -74,7 +74,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        # Simple check (replace with database query and password hashing in production)
+        # Simple check 
         if username in users and users[username] == password:
             session['username'] = username  # Store the username in session
             return redirect(url_for('home'))
@@ -99,7 +99,7 @@ def sign_up():
             flash('Username Already Exists. Please Choose a Different Username.', 'danger')
             return render_template('sign_up.html')
         
-        # Store the new user (you should hash the password in a real app)
+        # Store the new user 
         users[username] = password
         flash('Account Created Successfully !', 'success')
         return redirect(url_for('login'))
@@ -154,7 +154,7 @@ def update_task():
             mimetype='application/json'
         )
 
-# Endpoint to get all images for a selected category
+# Get all images for a selected category
 @app.route('/category_images/<category>', methods=['GET'])
 def category_images(category):
     if category not in CATEGORIES:
@@ -229,4 +229,5 @@ def upload_file():
         )
 
 if __name__ == '__main__':
+    print (os.getcwd())
     app.run(debug=True)
